@@ -1,9 +1,10 @@
 from flask import jsonify
 from flask_jwt_simple import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, abort
-from app.app import main_app
-from resources.users_repo import User
-from resources.posts_repo import Post
+
+from app.app_file import main_app
+from app.data.user import User
+from app.data.posts import Post
 
 
 parser = reqparse.RequestParser()
@@ -35,7 +36,7 @@ class PostListRes(Resource):
     @jwt_required
     def post(self):
         args = parser.parse_args()
-        post = Post(**dict(args))
+        post = Post(**args)
         post.author = User(**get_jwt_identity())
         post = main_app.posts_repo.request_create(post)
         return jsonify(post)

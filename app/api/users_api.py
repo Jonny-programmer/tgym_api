@@ -1,8 +1,8 @@
 from flask import jsonify
 from flask_restful import Resource, reqparse, abort
 
-from app.app import main_app
-from tools.misc import create_jwt_for_user
+from app.app_file import main_app
+from app.tools.misc import create_jwt_for_user
 
 parser = reqparse.RequestParser()
 parser.add_argument('username', required=True)

@@ -1,7 +1,7 @@
 from flask import make_response
 from flask_jwt_simple import create_jwt
 
-from resources.users_repo import User
+from app.resources.users_repo import User
 
 
 def make_resp(message, status):
