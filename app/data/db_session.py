@@ -20,7 +20,7 @@ def global_init(db_file):
     conn_str = f'sqlite:///{db_file.strip()}?check_same_thread=False'
     print(f"Подключение к базе данных по адресу {conn_str}")
 
-    engine = sa.create_engine(conn_str, pool_pre_ping=True, echo=True)
+    engine = sa.create_engine(conn_str, pool_pre_ping=True, echo=False)
     # Если установить echo=True, то в консоль будут выводиться все SQL-запросы
     # Не нужно - поставьте False
     __factory = orm.sessionmaker(bind=engine)

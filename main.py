@@ -1,3 +1,5 @@
+import os
+from flask import send_from_directory
 from app.api.posts_api import PostListRes, PostRes
 from app.api.users_api import RegisterRes, LoginRes, UserPosts
 from app.app_file import main_app
@@ -7,7 +9,10 @@ from app.app_file import main_app
 @main_app.route('/u/<path:path>')
 @main_app.route('/a/<path:path>')
 def root(path):
-    return main_app.send_static_file("index.html")
+    print("Here we go, maaaaaan")
+    path = os.path.join(os.getcwd(), "static")
+    print(path)
+    return send_from_directory(path, "index.html")
 
 
 main_app.api.add_resource(RegisterRes, "/api/register")

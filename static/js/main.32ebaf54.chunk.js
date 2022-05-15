@@ -858,7 +858,7 @@
           , Ke = function() {
             return i.a.createElement(qe, {
                 to: "/"
-            }, "asperitas")
+            }, "API test")
         }
           , Je = be.d.svg.withConfig({
             displayName: "Icon",

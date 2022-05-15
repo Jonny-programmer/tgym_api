@@ -14,7 +14,9 @@ class MemoryPostsRepo:
     def get_by_id(self, id):
         return tuple(self.db_sess.query(Post).filter(Post.id == id).first())
 
-    def request_create(self, post):
+    def request_create(self, post, user_id):
+        user = self.db_sess.query(User).filter(User.id == user_id).first()
+        post.author = user
         post.created = datetime.now()
         self.db_sess.add(post)
         self.db_sess.commit()
@@ -31,8 +33,9 @@ class MemoryPostsRepo:
         return None
 
     def get_by_username(self, username):
-        user = self.db_sess.query(User).filter(User.username == username)
-        return tuple(user.posts)
+        user = self.db_sess.query(User).filter(User.username == username).first()
+        posts = self.db_sess.query(Post).filter(Post.author == user).all()
+        return tuple(posts)
 
     def get_by_category(self, category):
         posts = self.db_sess.query(Post).filter(Post.category == category).all()

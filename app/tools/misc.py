@@ -15,7 +15,9 @@ def check_keys(dct, keys):
 
 
 def create_jwt_for_user(user):
-    cp_user = User(**user)
-    del cp_user['password']
+    cp_user = {"user": {
+        "username": user.username,
+        "id": user.id,
+    }}
     j_token = {"token": create_jwt(identity=cp_user)}
     return j_token
