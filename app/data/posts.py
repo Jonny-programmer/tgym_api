@@ -22,10 +22,13 @@ class Post(SqlAlchemyBase):
     # Пользователь, который создал этот пост
     author = orm.relation('User')
 
+    def __init__(self, *args, **kwargs):
+        print("Doing init for post")
+        print(args)
+        print(kwargs)
+        super().__init__(*args, **kwargs)
+
     def __dict__(self):
         print("=)=)=) One again into!!!!!!")
-        if self.text:
-            return {"author": self.author, "category": self.category, "created": self.created,
-                    "id": self.id, "text": self.text, "title": self.title, "type": self.type}
         return {"author": self.author, "category": self.category, "created": self.created,
-                    "id": self.id, "url": self.url, "title": self.title, "type": self.type}
+                    "id": self.id, "url": self.url, "title": self.title, "type": self.type, "text": self.text}
