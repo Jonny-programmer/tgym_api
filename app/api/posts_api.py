@@ -39,10 +39,13 @@ class PostListRes(Resource):
     @jwt_required
     def post(self):
         args = parser.parse_args()
-        print("\n\n")
-        print(args)
-        print("\n\n")
-        post = Post(**args)
+        post = Post(
+            category=args.get('category', None),
+            title=args.get('title', None),
+            text=args.get('text', None),
+            url=args.get('url', None),
+            type=args.get('type', None),
+        )
         print("~~~~This worked!")
         user_id = get_jwt_identity().get('user').get('id')
         post = main_app.posts_repo.request_create(post, user_id)

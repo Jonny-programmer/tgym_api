@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.data.db_session import SqlAlchemyBase
 
 
-class User(SqlAlchemyBase):
+class User(SqlAlchemyBase, dict):
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
