@@ -9,6 +9,7 @@ class MemoryPostsRepo:
         self.db_sess = create_session()
 
     def get_all(self):
+        print("Here the problem starts")
         return tuple(self.db_sess.query(Post).all())
 
     def get_by_id(self, id):

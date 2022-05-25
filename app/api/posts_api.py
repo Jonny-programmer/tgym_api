@@ -1,14 +1,10 @@
-import sys
-
 from flask import jsonify
 from flask_jwt_simple import jwt_required, get_jwt_identity
 from flask_restful import Resource, reqparse, abort
 
 from app.app_file import main_app
-from app.data.db_session import create_session
-from app.data.user import User
 from app.data.posts import Post
-
+from app.data.user import User
 
 parser = reqparse.RequestParser()
 parser.add_argument('category', required=True)
@@ -46,7 +42,7 @@ class PostListRes(Resource):
             url=args.get('url', None),
             type=args.get('type', None),
         )
-        print("~~~~This worked!")
+        print("~~~~This worked!~~~~")
         user_id = get_jwt_identity().get('user').get('id')
         post = main_app.posts_repo.request_create(post, user_id)
         return jsonify(post)

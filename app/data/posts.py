@@ -6,6 +6,8 @@ from app.data.db_session import SqlAlchemyBase
 
 
 class Post(SqlAlchemyBase, dict):
+    __setattr__ = dict.__setitem__
+    __delattr__ = dict.__delitem__
     __tablename__ = 'posts'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -21,3 +23,7 @@ class Post(SqlAlchemyBase, dict):
     url = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     # Пользователь, который создал этот пост
     author = orm.relation('User')
+
+    def __getattr__(self, item):
+        print(item)
+        return self.__getattribute__(item)
