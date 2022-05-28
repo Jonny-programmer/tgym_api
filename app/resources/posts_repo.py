@@ -9,11 +9,11 @@ class MemoryPostsRepo:
         self.db_sess = create_session()
 
     def get_all(self):
-        print("Here the problem starts")
         return tuple(self.db_sess.query(Post).all())
 
     def get_by_id(self, id):
-        return tuple(self.db_sess.query(Post).filter(Post.id == id).first())
+        post = self.db_sess.query(Post).filter(Post.id == id).first()
+        return post
 
     def request_create(self, post, user_id):
         user = self.db_sess.query(User).filter(User.id == user_id).first()
