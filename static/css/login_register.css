@@ -1,0 +1,35 @@
+.container, form.login_form {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 500px;
+    background-color: #ffcc00;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: center;
+}
+
+.wrapper {
+    min-height: 100vh;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+}
+
+.form-group .form-wrapper {
+    width: 47%;
+    display: inline-block;
+ }
+.form-group .form-wrapper:first-child {
+    margin-right: 20px;
+}
+
+.form-wrapper {
+    margin-bottom: 17px;
+}
+
+.form-wrapper label {
+    margin-bottom: 9px;
+    display: block;
+}

@@ -1,0 +1,44 @@
+
+h2 {
+    font-style: italic;
+    display:inline-block;
+    color: #32557f;
+    text-decoration: none;
+    border-bottom: 2px dashed #32557f;
+    padding-bottom: 3px;
+}
+
+fieldset {
+    margin: 0 auto;
+    max-width: 90%;
+}
+
+.content-section {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.media {
+    text-align: center;
+    margin: 0 auto;
+    align-items: center;
+    max-width: 80%
+}
+
+.profile-wrapper {
+    text-size: 10px;
+    margin: 0 auto !important;
+    max-width: 100%;
+    border: 1px solid green;
+    text-align: center;
+    dislpay: grid;
+    grid-template-columns: 60% 20% 20%;
+}
+
+.date {
+    display: table-cell;
+}
+
+.col {
+    width: max-content;
+}

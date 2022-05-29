@@ -1,0 +1,37 @@
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/post.css') }}"/>
+
+<li class="list-group-item list-group-item-info">
+    <div class="comment-wrapper media" align="center">
+        <div class="row">
+            <div class="col-2" align="content">
+                {{ post.author.avatar(60) }}
+            </div>
+            <div class="col-8" align="left">
+                <div class="row field-group">
+                    <span style="float:left">
+                        <h3><b>{{ post.author.name }} {{ post.author.surname }}</b> <span id='comment_id' class="badge rounded-pill bg-primary">Post #{{ post.id }}</span></h3>
+                    </span>
+                </div>
+                <div class="row">
+                    <h6>@{{ post.author.username }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2>{{ post.title }}</h2>
+        </div>
+        <div class="row">
+            <p>{{ post.text }}
+            </p>
+        </div>
+        <div class="field-group">
+            <span style="float:left">
+                <a href="/a/{{ post.category }}"><em>{{ post.category.name }}</em></a>
+            </span>
+            <!-- Если хочешь нормально, убери <br> и сделай float:right у второго-->
+            <span style="float:right">
+                <label class="date" ><em>Date created - {{ post.created }}</em></label>
+            </span>
+        </div>
+    </div>
+</li>
