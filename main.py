@@ -1,16 +1,18 @@
-import os
+import sys
+from datetime import datetime
 from random import choice
 
-from flask import send_from_directory, jsonify, request, render_template, make_response
+from flask import jsonify, request, render_template, make_response
+from flask import redirect
 from flask_jwt_simple import jwt_required, get_jwt_identity
 from flask_login import login_required, logout_user, login_user, current_user
 from flask_restful import Resource, abort, reqparse
-from flask import redirect
 
 from app.app_file import main_app
 from app.data import db_session
 from app.data.posts import Post
 from app.data.user import User
+from app.forms.create_post import CreatePostForm
 from app.forms.login import LoginForm
 from app.forms.register import RegisterForm
 from app.tools.misc import create_jwt_for_user
@@ -20,13 +22,104 @@ from app.tools.misc import create_jwt_for_user
 def root():
     db_sess = db_session.create_session()
     posts = db_sess.query(Post).all()
-    return render_template('index.html', he=current_user, posts=posts)
+    categories = []
+    show_buttons = []
+    for post in posts:
+        categories.append(post.category)
+        if current_user.is_authenticated and current_user == post.author:
+            show_buttons.append(1)
+        else:
+            show_buttons.append(0)
+    return render_template('main.html', he=current_user, posts=posts, show_buttons=show_buttons,
+                           categories=categories)
 
 
-# @main_app.route('/posts/<int:path>') - страница редактирования
-# @main_app.route('/a/<path:path>')
-# @main_app.route('/create_post')
-# /delete_post/{{ item.id }}
+@main_app.route('/create_post', methods=['GET', 'POST'])
+@login_required
+def create_post():
+    form = CreatePostForm()
+    if form.validate_on_submit() or request.method == 'POST':
+        db_sess = db_session.create_session()
+        post = Post(
+            title=form.title.data,
+            text=form.content.data,
+            is_private=form.is_private.data,
+            created=datetime.now(),
+            category=form.category.data
+        )
+        current_user.posts.append(post)
+        db_sess.merge(current_user)
+        db_sess.commit()
+        return redirect('/')
+    return render_template('create_post.html', form=form, title="Добавить новость")
+
+
+@main_app.route('/posts/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_post(id):
+    form = CreatePostForm()
+    if request.method == "GET":
+        post = main_app.posts_repo.get_by_id(id)
+        if post:
+            form.title.data = post.title
+            form.content.data = post.text
+            form.category.data = post.category
+            form.is_private.data = post.is_private
+        else:
+            abort(404)
+    if form.validate_on_submit() or request.method == "POST":
+        db_sess = db_session.create_session()
+        post = db_sess.query(Post).filter(Post.id == id, Post.author == current_user).first()
+        if post:
+            post.title = form.title.data
+            post.text = form.content.data
+            post.category = form.category.data
+            post.is_private = form.is_private.data
+            db_sess.commit()
+            return redirect('/')
+        else:
+            abort(404)
+    return render_template('create_post.html', title='Редактирование поста', form=form)
+
+
+@main_app.route('/a/<category_name>')
+def show_all_by_cat(category_name):
+    posts = main_app.posts_repo.get_by_category(category_name)
+    show_buttons = []
+    for post in posts:
+        if current_user.is_authenticated and current_user == post.author:
+            show_buttons.append(1)
+        else:
+            show_buttons.append(0)
+    return render_template('category_posts.html', category=category_name, posts=posts, show_buttons=show_buttons)
+
+
+@main_app.route('/delete_post/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_post(id):
+    db_sess = db_session.create_session()
+    post = db_sess.query(Post).filter(Post.id == id, Post.author == current_user).first()
+    if post:
+        db_sess.delete(post)
+        db_sess.commit()
+    else:
+        abort(404)
+    return redirect('/')
+
+
+@main_app.route('/users/<int:id>', defaults={'nickname': None}, methods=['GET', 'POST'])
+@main_app.route('/users/<nickname>', defaults={'id': None}, methods=['GET', 'POST'])
+def profile(id=None, nickname=None):
+    form = RegisterForm()
+    user = main_app.users_repo.get_by_id(id)
+    if not user:
+        user = main_app.users_repo.get_by_username(nickname)
+        if not user:
+            abort(404)
+    if form.validate_on_submit() or request.method == 'POST':
+        print("Ooops....")
+        sys.exit(1)
+    return render_template('profile.html', he=current_user, user=user, form=form)
 
 
 @main_app.route('/logout')
@@ -89,17 +182,24 @@ def cookie_test():
         res = make_response(
             "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css'>"
             f"<div align='center'><h1>Вы заходили на эту страницу {visits_count + 1} раз/а</h1>"
-            f"<a class='btn btn-{choice(button_types)}' style='align: center;' href='/'>Вернуться домой</a></div>")
+            f"<a class='btn btn-{choice(button_types)}' style='align: center;' href='/'>Вернуться домой</a></div>"
+            )
         res.set_cookie("visits_count", str(visits_count + 1),
                        max_age=60 * 60 * 24)
     else:
         res = make_response(
             "<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css'>"
             "<h1 align='center'>Вы пришли на эту страницу в первый раз за последний день</h1>"
-            "<a class='btn btn-primary' style='align: center;' href='/'>Вернуться домой</a>")
+            "<a class='btn btn-primary' style='align: center;' href='/'>Вернуться домой</a>"
+            )
         res.set_cookie("visits_count", '1',
                        max_age=60 * 60 * 24)
     return res
+
+
+@main_app.route('/about')
+def about():
+    return render_template('about.html', he=current_user)
 
 
 @main_app.errorhandler(404)
@@ -186,8 +286,5 @@ main_app.api.add_resource(PostListRes, "/api/posts/<category_name>", "/api/posts
 main_app.api.add_resource(PostRes, "/api/post/<int:post_id>")
 main_app.api.add_resource(UserPosts, "/api/user/<user_login>")
 
-# main_app.logger.info('grolsh')
-
-
 if __name__ == "__main__":
-    main_app.run()
+    main_app.run(host="0.0.0.0", port=5000)

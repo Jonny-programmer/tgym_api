@@ -7,6 +7,9 @@ h2 {
     border-bottom: 2px dashed #32557f;
     padding-bottom: 3px;
 }
+.title {
+    margin-top: 150px;
+}
 
 fieldset {
     margin: 0 auto;
@@ -22,7 +25,20 @@ fieldset {
     text-align: center;
     margin: 0 auto;
     align-items: center;
-    max-width: 80%
+    max-width: 100%
+}
+a {
+  color: #000;
+  text-color: #000;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+badge {
+    text-color: #000;
+    margin-right: 0px;
+    margin-left: 10px;
+    margin-top: 0;
 }
 
 .profile-wrapper {

@@ -1,19 +1,14 @@
-from django.db.models import TextField
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, Length
 
 
-class PostForm(FlaskForm):
+class CreatePostForm(FlaskForm):
     title = StringField('Заголовок', validators=[DataRequired()])
 
-    text = TextField('Напишите что-нибудь...', validators=[Length(min=8)])
-
-    category = SelectField('Категория', choices=[(1, 'music'),
-                                                 (2, 'funny'),
-                                                 (3, 'videos'),
-                                                 (4, 'programming'),
-                                                 (5, 'news'),
-                                                 (6, 'fashion'),
-                                                 (7, 'aviation'),])
+    content = TextAreaField('Напишите что-нибудь...', validators=[Length(min=8)])
+    is_private = BooleanField('Сделать новость доступной только мне')
+    category = SelectField('Категория', choices=['music', 'funny', 'videos', 'school'
+                                                 'programming', 'news', 'fashion', 'aviation',
+                                                 '---'])
     submit = SubmitField('Опубликовать')

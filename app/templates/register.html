@@ -18,26 +18,56 @@
         <form class="login_form" method="post">
             <div class="form-group">
                 {{ form.username(class="form-control", placeholder="Введите имя пользователя") }}
+                {% for error in form.username.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
             </div>
             <br>
             <div class="form-group">
                 <div class="form-wrapper" align="left">
                     {{ form.name(type="text", class="form-control", id="name", placeholder="Введите имя") }}
+                    {% for error in form.name.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
                 </div>
                 <div class="form-wrapper" align="right">
                     {{ form.surname(type="text", class="form-control", id="name", placeholder="Введите фамилию") }}
+                    {% for error in form.surname.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
                 </div>
             </div>
 
             {{ form.email(type="email", class="form-control", id="email", placeholder="Введите адрес почты") }}
+            {% for error in form.email.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
             <br>
             <div class="form-group">
                 {{ form.password.label(align="left") }}
                 {{ form.password(class="form-control", id="password", placeholder="Введите пароль") }}
+                {% for error in form.password.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
             </div>
             <div class="form-group">
                 {{ form.password_again.label(align="left") }}
                 {{ form.password_again(class="form-control", id="password", placeholder="Введите пароль") }}
+                {% for error in form.password_again.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
             </div>
             <br>
             <div class="traceback" style="color: red; align:left;">

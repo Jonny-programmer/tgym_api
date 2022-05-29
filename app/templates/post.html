@@ -2,36 +2,44 @@
 
 <li class="list-group-item list-group-item-info">
     <div class="comment-wrapper media" align="center">
-        <div class="row">
-            <div class="col-2" align="content">
-                {{ post.author.avatar(60) }}
-            </div>
-            <div class="col-8" align="left">
-                <div class="row field-group">
-                    <span style="float:left">
-                        <h3><b>{{ post.author.name }} {{ post.author.surname }}</b> <span id='comment_id' class="badge rounded-pill bg-primary">Post #{{ post.id }}</span></h3>
-                    </span>
+        <div class="container">
+            <div class="row">
+                <div class="col-2" align="content">
+                    <a href="/users/{{ post.author.id }}">
+                        <img class="img" style="border-radius: 1em;" src="{{ post.author.avatar(60) }}">
+                    </a>
                 </div>
-                <div class="row">
-                    <h6>@{{ post.author.username }}</h6>
+                <div class="col-8" align="left">
+                    <div class="row field-group">
+                        <span style="float:left">
+                            <h4><a href="/users/{{ post.author.id }}">{{ post.author.name }} {{ post.author.surname }}               </a>
+                                <span id='comment_id' style="align:right;" class="badge rounded-pill bg-warning">Post #{{ post.id }}</span></h4>
+                        </span>
+                    </div>
+                    <div class="row">
+                        <h6><a href="/users/{{ post.author.id }}">@{{ post.author.username }}</a></h6>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <h2>{{ post.title }}</h2>
-        </div>
-        <div class="row">
-            <p>{{ post.text }}
-            </p>
-        </div>
-        <div class="field-group">
-            <span style="float:left">
-                <a href="/a/{{ post.category }}"><em>{{ post.category.name }}</em></a>
-            </span>
-            <!-- Если хочешь нормально, убери <br> и сделай float:right у второго-->
-            <span style="float:right">
-                <label class="date" ><em>Date created - {{ post.created }}</em></label>
-            </span>
+
+            <div class="row" style="margin: 0 auto; text-align:center; display:flex; justify-content:center;">
+                <h4><b><u>{{ post.title }}</u></b></h4>
+            </div>
+
+            <div class="row ">
+                <p><h6>{{ post.text }}
+                </h6></p>
+            </div>
+
+            <div class="field-group">
+                <span style="float:left">
+                    <b>[ <a href="/a/{{ post.category }}"><em>{{ post.category }}</em></a> ]</b>
+                </span>
+                <!-- Если хочешь нормально, убери <br> и сделай float:right у второго-->
+                <span style="float:right">
+                    <label class="date" ><em>Date created - {{ post.created }}</em></label>
+                </span>
+            </div>
         </div>
     </div>
 </li>

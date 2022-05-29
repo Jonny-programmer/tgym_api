@@ -15,23 +15,23 @@
 			<nav id="sidebar">
 				<div class="p-4 pt-5">
                     {% if he.is_authenticated %}
-                        <a href="/users/{{ he.id }}" class="img logo rounded-circle mb-5" style="background-image: url({{ he.avatar(80) }});"></a>
+                        <a href="/users/{{ he.id }}" class="img logo rounded-circle mb-5" style="background-image: url({{ he.avatar(120) }});"></a>
                     {% else %}
                         <a href="#" class="img logo rounded-circle mb-5" style="background-image: url({{ url_for('static', filename='images/logo.jpg') }});"></a>
                     {% endif %}
+
 	        <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="/">Home</a>
+                </li>
                   <li class="active">
-                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Home</a>
+                        <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Categories</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
-                        <li>
-                            <a href="#">Home 1</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 2</a>
-                        </li>
-                        <li>
-                            <a href="#">Home 3</a>
-                        </li>
+                        {% for cat in categories%}
+                            <li>
+                                <a href="/a/{{ cat }}">{{ cat }}</a>
+                            </li>
+                        {% endfor %}
                         </ul>
                   </li>
 
@@ -48,7 +48,7 @@
                       </li>
                   {% endif %}
                   <li>
-                  <a href="#">About us</a>
+                  <a href="/about">About us</a>
                   </li>
                   <li>
                   <a href="/cookie_test">Cookie test</a>
@@ -56,7 +56,6 @@
 	        </ul>
 
 	        <div class="footer">
-
 	        </div>
 
 	      </div>
@@ -79,7 +78,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="nav navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
+                    <a class="nav-link" href="/">Home</a>
                 </li> |
                 {% if he.is_authenticated %}
                     <li class="nav-item">
@@ -101,28 +100,9 @@
           </div>
         </nav>
 
-        <h2 class="mb-4">This is my API test app</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        {% if he.is_authenticated %}
-            <a href="/create_post" class="btn btn-secondary">Добавить новость</a>
-        {% endif %}
-        <ul>
-        {% for post in posts %}
-            {% include("post.html") %}
-            {% if he.is_authenticated and he == post.user %}
-            <div class="form-group">
-                <a href="/posts/{{ post.id }}" class="btn btn-warning">
-                    Изменить
-                </a>
-                <a href="/delete_post/{{ post.id }}" class="btn btn-danger">
-                    Удалить
-                </a>
-            </div>
-            {% endif %}
-        {% endfor %}
-        </ul>
+        {% block content %}{% endblock %}
       </div>
-		</div>
+</div>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

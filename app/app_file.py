@@ -37,7 +37,7 @@ class MyApp(Flask):
 
 
 main_app = MyApp(__name__, static_folder='./../static')
-main_app.config.update(EXPLAIN_TEMPLATE_LOADING=True)
+# main_app.config.update(EXPLAIN_TEMPLATE_LOADING=True)
 
 
 @main_app.jwt.expired_token_loader

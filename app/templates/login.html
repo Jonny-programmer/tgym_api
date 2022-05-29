@@ -18,11 +18,21 @@
         <form class="login_form" method="post">
             <div class="form-group">
                 {{ form.username(type="text", class="form-control", id="username", placeholder="Введите имя пользователя или почту") }}
+                {% for error in form.username.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
             </div>
             <br>
             <div class="form-group">
                 {{ form.password.label }}
                 {{ form.password(class="form-control", id="password", placeholder="Введите пароль") }}
+                {% for error in form.password.errors %}
+                    <p class="alert alert-danger" role="alert">
+                        {{ error }}
+                    </p>
+                {% endfor %}
             </div>
             <br>
             <div class="traceback" style="color: red; align:left;">

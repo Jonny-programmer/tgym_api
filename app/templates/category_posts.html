@@ -1,0 +1,30 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+<br>
+<br>
+<div class="wrapper" align="center">
+    <h1>[ <a href="/a/{{ category }}"><em>{{ category }}</em></a> ]</h1>
+    <a class="btn btn-dark" href="/">Вернуться домой</a>
+    <div class="content-container" style="max-width: 80%">
+        <ul style="margin-top:10px;">
+        {% for post in posts %}
+            {% include("post.html") %}
+            {% if show_buttons[loop.index0] %}
+                <div class="form-group">
+                    <a href="/posts/{{ post.id }}" class="btn btn-warning">
+                        Изменить
+                    </a>
+                    <a href="/delete_post/{{ post.id }}" class="btn btn-danger">
+                        Удалить
+                    </a>
+                </div>
+
+            {% endif %}
+        <br>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
