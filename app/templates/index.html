@@ -99,6 +99,32 @@
             </div>
           </div>
         </nav>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div id="liveAlertPlaceholder">
+                        <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                            {{ message }}
+                            <button style="align:right;" id="remove-alert" type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">╳</button>
+                            <script type="text/javascript">
+                                var closeAlert = document.getElementById('remove-alert')
+
+                                if (closeAlert) {
+                                    closeAlert.addEventListener('click', function() {
+                                        remove()
+                                    })
+                                }
+                                function remove() {
+                                    var div = document.getElementById("liveAlertPlaceholder");
+                                    div.parentNode.removeChild(div);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
 
         {% block content %}{% endblock %}
       </div>

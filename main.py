@@ -2,7 +2,7 @@ import sys
 from datetime import datetime
 from random import choice
 
-from flask import jsonify, request, render_template, make_response
+from flask import jsonify, request, render_template, make_response, flash
 from flask import redirect
 from flask_jwt_simple import jwt_required, get_jwt_identity
 from flask_login import login_required, logout_user, login_user, current_user
@@ -55,8 +55,10 @@ def create_post():
 
 
 @main_app.route('/posts/<int:id>', methods=['GET', 'POST'])
-@login_required
 def edit_post(id):
+    if not current_user.is_authenticated:
+        flash("You must log in to see that", 'warning')
+        return redirect('/')
     form = CreatePostForm()
     if request.method == "GET":
         post = main_app.posts_repo.get_by_id(id)
@@ -91,7 +93,8 @@ def show_all_by_cat(category_name):
             show_buttons.append(1)
         else:
             show_buttons.append(0)
-    return render_template('category_posts.html', category=category_name, posts=posts, show_buttons=show_buttons)
+    return render_template('category_posts.html', category=category_name,
+                           he=current_user, posts=posts, show_buttons=show_buttons)
 
 
 @main_app.route('/delete_post/<int:id>', methods=['GET', 'POST'])
@@ -287,4 +290,5 @@ main_app.api.add_resource(PostRes, "/api/post/<int:post_id>")
 main_app.api.add_resource(UserPosts, "/api/user/<user_login>")
 
 if __name__ == "__main__":
-    main_app.run(host="0.0.0.0", port=5000)
+    # main_app.run(host="0.0.0.0", port=5000)
+    main_app.run()
