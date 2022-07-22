@@ -2,7 +2,6 @@ import datetime
 from hashlib import md5
 
 import sqlalchemy
-from bokeh.core.property import nullable
 from flask_login import UserMixin
 from sqlalchemy import orm
 from werkzeug.security import generate_password_hash, check_password_hash

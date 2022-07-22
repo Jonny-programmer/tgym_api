@@ -7,6 +7,7 @@ from flask import redirect
 from flask_jwt_simple import jwt_required, get_jwt_identity
 from flask_login import login_required, logout_user, login_user, current_user
 from flask_restful import Resource, abort, reqparse
+from waitress import serve
 
 from app.app_file import main_app
 from app.data import db_session
@@ -220,13 +221,17 @@ post_parser.add_argument('url', required=False)
 # Parser for creating a user
 user_parser = reqparse.RequestParser()
 user_parser.add_argument('username', required=True)
+user_parser.add_argument('name', required=True)
+user_parser.add_argument('surname', required=True)
+user_parser.add_argument('email', required=True)
 user_parser.add_argument('password', required=True)
 
 
 class RegisterRes(Resource):
     def post(self):
         args = user_parser.parse_args()
-        created_user = main_app.users_repo.request_create(args["username"], args["password"])
+        created_user = main_app.users_repo.request_create(
+            args["username"], args['name'], args['surname'], args['email'], args["password"])
         if not created_user:
             abort(400, message="Duplicated username")
         return create_jwt_for_user(created_user)
@@ -290,5 +295,6 @@ main_app.api.add_resource(PostRes, "/api/post/<int:post_id>")
 main_app.api.add_resource(UserPosts, "/api/user/<user_login>")
 
 if __name__ == "__main__":
-    # main_app.run(host="0.0.0.0", port=5000)
-    main_app.run()
+    main_app.run(host="0.0.0.0", port=5000)
+    # main_app.run()
+    # serve(main_app)
